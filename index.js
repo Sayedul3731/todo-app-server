@@ -43,6 +43,23 @@ async function run() {
             const result = await todosCollection.deleteOne({ _id: new ObjectId(id) })
             res.send(result)
         })
+        app.patch('/todos/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const newInfo = req.body;
+            const updateInfo = {
+                $set: {
+                    title: newInfo?.title,
+                    description: newInfo?.description,
+                    createdDate: newInfo?.createdDate,
+                    quality: newInfo?.quality,
+                    image: newInfo?.image,
+                    status: newInfo?.status
+                }
+            }
+            const result = await todosCollection.updateOne(filter, updateInfo)
+            res.send(result)
+        })
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
