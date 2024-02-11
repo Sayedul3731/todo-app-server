@@ -52,12 +52,27 @@ async function run() {
                     title: newInfo?.title,
                     description: newInfo?.description,
                     createdDate: newInfo?.createdDate,
-                    quality: newInfo?.quality,
+                    priority: newInfo?.priority,
                     image: newInfo?.image,
                     status: newInfo?.status
                 }
             }
             const result = await todosCollection.updateOne(filter, updateInfo)
+            res.send(result)
+        })
+        app.patch('/todos/todo/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const newInfo = req.body;
+            console.log(newInfo);
+            const filter = { _id: new ObjectId(id) }
+            const updateInfo = {
+                $set: {
+                    status: newInfo?.status
+                }
+            }
+            const result = await todosCollection.updateOne(filter, updateInfo)
+            console.log(result);
             res.send(result)
         })
         // Send a ping to confirm a successful connection
